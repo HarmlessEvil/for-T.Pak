@@ -8,6 +8,34 @@ Matrix :: Matrix (unsigned  n) {
     tab = vector<vector<double>>(n, vector<double>(n + 1, 0));
 }
 
+vector<double> Matrix :: quadratize()
+{
+	vector<double> result;
+	unsigned int s = size();
+	if (tab.size() != tab[0].size()) {
+		for (unsigned int i = 0; i < s; i++) {
+			result.push_back(tab[i][s]);
+			tab[i].resize(s);
+		}
+	}
+
+	return result;
+}
+
+Matrix Matrix :: transpose()
+{
+	unsigned int s = size();
+	Matrix result = Matrix(s);
+	
+	for (unsigned int i = 0; i < s; i++) {
+		for (unsigned int j = 0; j < s; j++) {
+			result[j][i] = tab[i][j];
+		}
+	}
+
+	return result;
+}
+
 unsigned int Matrix :: size() {
     return tab[0].size() - 1;
 }
@@ -19,7 +47,7 @@ Matrix :: ~Matrix() {
     tab.clear();
 }
 
-vector<double>& Matrix::operator[](int i) {
+vector<double>& Matrix :: operator[](int i) {
     return tab[i];
 }
 
