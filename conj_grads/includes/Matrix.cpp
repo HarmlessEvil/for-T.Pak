@@ -8,6 +8,52 @@ Matrix :: Matrix (unsigned  n) {
     tab = vector<vector<double>>(n, vector<double>(n + 1, 0));
 }
 
+Matrix Matrix :: operator*(Matrix & x)
+{
+	unsigned s = size();
+	Matrix result = Matrix(s + 1);
+	result.quadratize();
+
+	for (unsigned i = 0; i <= s; i++) {
+		for (unsigned j = 0; j <= s; j++) {
+			for (unsigned k = 0; k <= s; k++) {
+				result[i][j] += tab[i][k] * x[k][j];
+			}
+		}
+	}
+
+	return result;
+}
+
+vector<double> Matrix :: operator*(vector<double>& x)
+{
+	unsigned s = size();
+	vector<double> result(s + 1, 0);
+
+	for (unsigned i = 0; i <= s; i++) {
+		for (unsigned j = 0; j <= s; j++) {
+			result[i] += tab[i][j] * x[j];
+		}
+	}
+
+	return result;
+}
+
+Matrix Matrix :: operator*(double x)
+{
+	unsigned s = size();
+	Matrix result(s + 1);
+	result.quadratize();
+
+	for (unsigned i = 0; i <= s; i++) {
+		for (unsigned j = 0; j <= s; j++) {
+			result[i][j] = tab[i][j] * x;
+		}
+	}
+
+	return result;
+}
+
 vector<double> Matrix :: quadratize()
 {
 	vector<double> result;
@@ -25,7 +71,8 @@ vector<double> Matrix :: quadratize()
 Matrix Matrix :: transpose()
 {
 	unsigned int s = size();
-	Matrix result = Matrix(s);
+	Matrix result = Matrix(s + 1);
+	result.quadratize();
 	
 	for (unsigned int i = 0; i < s; i++) {
 		for (unsigned int j = 0; j < s; j++) {
@@ -49,6 +96,18 @@ Matrix :: ~Matrix() {
 
 vector<double>& Matrix :: operator[](int i) {
     return tab[i];
+}
+
+vector<double> Matrix :: operator()(unsigned j)
+{
+	unsigned s = size();
+	vector<double> result(s + 1, 0);
+
+	for (unsigned i = 0; i <= s; i++) {
+		result[i] = tab[i][j];
+	}
+
+	return result;
 }
 
 istream& operator>> (istream& is, Matrix& x) {
@@ -121,4 +180,26 @@ vector<double> solve(Matrix a) {
 	for (int i = 0; i < size; res.push_back(a[i++][size]));
 
 	return res;
+}
+
+vector<double> vsMul(vector<double>& lhs, double rhs)
+{
+	vector<double> result(lhs);
+
+	for (unsigned i = 0; i < lhs.size(); i++) {
+		result[i] *= rhs;
+	}
+
+	return result;
+}
+
+double scalarMul(vector<double>& lhs, vector<double>& rhs)
+{
+	double result = 0;
+
+	for (unsigned i = 0; i < lhs.size(); i++) {
+		result += lhs[i] * rhs[i];
+	}
+
+	return result;
 }
